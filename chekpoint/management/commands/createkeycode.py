@@ -5,8 +5,8 @@ import random
 class Command(BaseCommand):
     help = 'Generates random 4-digit numbers'
 
-    # def add_arguments(self, parser):
-    #     parser.add_argument('poll_id', nargs='+', type=int)
+    def add_arguments(self, parser):
+        parser.add_argument('poll_id', nargs='+', type=int)
 
     def handle(self, *args, **options):
         psw = ""
