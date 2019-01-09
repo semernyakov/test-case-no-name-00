@@ -1,12 +1,15 @@
 import hashlib
+
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
-from .models import KeyCounter
+from .models import KeyCounter, KeyBox
 
 
 def check_sum_generator(self):
     """
-    Генерация контрольных сумм, c установкой сопутсвующих параметров
+    Генерация контрольной сумму,
+    c установкой сопутсвующих параметров
     """
     if self.key_code is not None:
         hashgen = hashlib.md5()
@@ -15,21 +18,31 @@ def check_sum_generator(self):
         self.check_sum = hashgen.hexdigest()
         if self.check_sum:
             self.pub_date = timezone.now()
-            if not self.issue_status and self.key_counter.keys_amount:
+            #TODO: доработать счётчик!
+            if self.end_date is None and self.key_counter.keys_amount:
                 obj = get_object_or_404(KeyCounter, pk=self.key_counter.id)
                 obj.keys_amount -= 1
                 obj.save()
-            self.issue_status = True
         return
 
 
-def check_sum_controller(self):
+def check_sum_controller(code):
     """
-    Проверка контрольных сумм
+    Проверка контрольной суммы
     """
-    hash = hashlib.md5()
-    if self.key_code:
-        # t = self.key_code.encode()
-        hash.update(b'self')
-    return hash.hexdigest()
+    if code:
+        hashgen = hashlib.md5()
+        key_code = code.encode()
+        hashgen.update(key_code)
+        input_check_sum = hashgen.hexdigest()
+        if input_check_sum:
+            try:
+                obj = KeyBox.objects.get(check_sum=input_check_sum)
+                return obj.check_sum
+            except KeyBox.DoesNotExist:
+                raise Http404("Введённый код отсутствует, либо уже активирован")
+                
+            
+
+
 

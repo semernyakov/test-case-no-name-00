@@ -15,7 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from chekpoint import views
 
 urlpatterns = [
+    path('', views.home, name='home'),
+    path('push/<str:check_sum>', views.push_check_sum, name='checked'),
     path('admin/', admin.site.urls),
 ]

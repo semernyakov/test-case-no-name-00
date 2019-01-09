@@ -9,7 +9,7 @@ class AdminKeyCounter(admin.ModelAdmin):
 
 @admin.register(KeyBox)
 class AdminKeyBox(admin.ModelAdmin):
-    list_display = ['id', 'key_code', 'activation_status', 'issue_status',
+    list_display = ['id', 'check_sum', 'key_code', 'activation_status', 'issue_status',
                     'key_amount', 'pub_date', 'end_date', 'owner']
     show_full_result_count = True
     search_fields = ['key_code', 'id']

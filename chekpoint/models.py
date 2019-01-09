@@ -23,16 +23,16 @@ class KeyBox(models.Model):
                           primary_key=True, default=uuid.uuid4)
     
     # ключь для погашения контрольной суммы
-    key_code = models.CharField(max_length=4, blank=True, unique=True)
+    key_code = models.CharField(max_length=4, blank=True, null=True, unique=True)
     
     # контрольная сумма
-    check_sum = models.CharField(max_length=32, blank=True, unique=True)
+    check_sum = models.CharField(max_length=32, blank=True, null=True, unique=True)
     
     # статус активации ключа (погашен/не погашен)
-    activation_status = models.BooleanField(default=None, blank=False)
+    activation_status = models.BooleanField(default=False, blank=False, null=True)
 
     # статус выдачи ключа (выдан/не выдан)
-    issue_status = models.BooleanField(default=False, blank=False)
+    issue_status = models.BooleanField(default=False, blank=False, null=True)
     
     # дата и время выдачи ключа
     pub_date = models.DateTimeField(blank=True, null=True)

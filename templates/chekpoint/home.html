@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>CheckPoint Project </title>
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+        integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
+        crossorigin="anonymous">
+</head>
+<body>
+<div class="container" style="padding-top: 3em;">
+
+  {% if messages %}
+    {% for message in messages %}
+     <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %}" role="alert">
+        <strong>{{ message }}</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="jumbotron" style="padding: 2em 2em;">
+    <h1 class="display-3">ChekPoint Project</h1>
+    <p class="lead">Сервис 4-х значных кодов. <br>
+      Общее кол-во не активированных ключей: {{ counter.keys_amount }}</p>
+    <hr class="my-2">
+    <p>Каждый код зашифрован по MD5 (англ. Message Digest 5) — 128-битный алгоритм хеширования, разработанн профессором Рональдом Л. Ривестом из Массачусетского технологического института (Massachusetts Institute of Technology, MIT) в 1991 году.</p>
+
+    <div class="lead">
+      <div class="row">
+
+        <div class="col-md-3">
+          <a class="btn btn-primary btn-lg" href="Jumbo action link" role="button">Генерировать код</a>
+        </div>
+
+        <div class="col-md-9">
+
+
+          <form class="form-inline" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+              <button style="margin: 0 1em 0 -1.5em;" name="" id="" value="/" class="btn btn-success btn-lg" type="submit">Активировать код</button>
+              <input maxlength="4" type="text" name="code" id="" class="form-control form-control-lg col-2" placeholder="XXXX" aria-describedby="helpId" required>
+              <small id="helpId" style="padding-left: 1em;" class="text-muted">Введите ваш 4-х значный код, с учётом регистра </small>
+            </div>
+          </form>
+
+        </div>
+
+      </div>
+  </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+</body>
+</html>

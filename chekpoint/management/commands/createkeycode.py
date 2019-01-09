@@ -1,34 +1,38 @@
 from django.core.management.base import BaseCommand, CommandError
+from django.utils.crypto import get_random_string
+from chekpoint.models import KeyBox
 import random
 
 
 class Command(BaseCommand):
-    help = 'Generates random 4-digit numbers'
-
-    def add_arguments(self, parser):
-        parser.add_argument('poll_id', nargs='+', type=int)
+    help = 'Генеририрует 10 4-х значных кодов и создаёт 10 соответсвующих ' \
+           'записей в базе. Для запуска выполните команду' \
+           '"./manage.py createkeycode" число можно указать любое!'
 
     def handle(self, *args, **options):
-        psw = ""
-        box = list()
-        row = list('123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM')
-    
-        limit = 1000
-        while limit:
-            for x in range(4):
-                psw += random.choice(row)
-            box.append(psw)
-            limit -= 1
-            psw = ""
-        
-        #
-        # for poll_id in options['poll_id']:
-        #     try:
-        #         poll = Poll.objects.get(pk=poll_id)
-        #     except Poll.DoesNotExist:
-        #         raise CommandError('Poll "%s" does not exist' % poll_id)
-        #
-        #     poll.opened = False
-        #     poll.save()
 
-        self.stdout.write(self.style.SUCCESS('Successfully created cod "%s"' % box))
+        key_cod = ""
+        key_box = list()
+        row = list('123456789qwertyuiopasdfghjklzxc'
+                   'vbnmQWERTYUIOPASDFGHJKLZXCVBNM')
+
+        counter = 10
+        while counter:
+            counter -= 1
+            for x in range(4):
+                key_cod += random.choice(row)
+            key_box.append(key_cod)
+            key_cod = ""
+        
+        if key_box:
+            try:
+
+                for i in key_box:
+                    kb = KeyBox(key_code=i)
+                    kb.save()
+                    
+            except CommandError as e:
+                print(e)
+                raise
+
+        self.stdout.write(self.style.SUCCESS('Успешно созданно 10 записей! {}'.format(key_box)))
