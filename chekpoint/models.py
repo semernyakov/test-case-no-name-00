@@ -44,6 +44,9 @@ class KeyBox(models.Model):
     key_counter = models.ForeignKey(KeyCounter, blank=True, null=True,
                                     on_delete=models.DO_NOTHING, default=1,
                                     editable=False)
+    # остановка подсчёта ключей
+    counter_write_off = models.BooleanField(blank=True, null=True, default=False,
+                                            editable=False)
 
     # владелец ключа
     owner = models.ForeignKey(User, blank=True, null=True,

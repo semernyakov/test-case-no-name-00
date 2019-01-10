@@ -18,12 +18,12 @@ def check_sum_generator(self):
         self.check_sum = hashgen.hexdigest()
         if self.check_sum:
             self.pub_date = timezone.now()
-            #TODO: доработать счётчик!
-            if self.end_date is None and self.key_counter.keys_amount:
+            if self.key_counter.keys_amount is not None and \
+                    not self.counter_write_off:
                 obj = get_object_or_404(KeyCounter, pk=self.key_counter.id)
                 obj.keys_amount -= 1
                 obj.save()
-        return
+                self.counter_write_off = True
 
 
 def check_sum_controller(code):
@@ -41,6 +41,7 @@ def check_sum_controller(code):
                 return obj.check_sum
             except KeyBox.DoesNotExist:
                 raise Http404("Введённый код отсутствует, либо уже активирован")
+    
                 
             
 
