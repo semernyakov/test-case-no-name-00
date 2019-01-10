@@ -13,10 +13,10 @@
 </head>
 <body>
 <div class="container" style="padding-top: 3em;">
+
   {% if messages %}
     {% for message in messages %}
-      <div class="alert alert-
-        {% if message.tags %}{{ message.tags }}{% endif %}" role="alert">
+      <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %}" role="alert">
         <strong>{{ message }}</strong>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -24,6 +24,7 @@
       </div>
     {% endfor %}
   {% endif %}
+
   <div class="jumbotron" style="padding: 2em 2em;">
     <h1 class="display-3">ChekPoint Project</h1>
     {% if not check_sum.activation_status %}
@@ -38,7 +39,7 @@
       Cтатус активации:
       <strong>{{ check_sum.activation_status|yesno:"Активирован,Не активирован" }}</strong><br>
       Дата активации: <strong>{{ check_sum.end_date }}</strong><br>
-      Дата выдачи: <strong>{{ check_sum.pub_date }}</strong><br>
+      Дата создания: <strong>{{ check_sum.pub_date }}</strong><br>
       Контрольная сумма: <strong>{{ check_sum.check_sum }}</strong><br>
       <!--Владелец: <strong>{{ check_sum.owner }}</strong>-->
     </p>

@@ -52,15 +52,21 @@ def push_check_sum(request, id):
         form = KeyCodeActivator(request.POST or None)
         if form.is_valid():
             get_check_sum = form.cleaned_data['check_sum']
+            
             if get_check_sum == check_sum.check_sum:
-                check_sum.activation_status = True
-                check_sum.issue_status = True
-                check_sum.end_date = timezone.now()
-                check_sum.save()
-                messages.info(request,
-                              'Поздравляем! Вы успешно активировали ваш '
-                              'секретный ключ.')
-                return HttpResponseRedirect('/push/{}'.format(check_sum))
+    
+                if not check_sum.issue_status:
+                    messages.info(request, 'Ключ нельзя активировать, до момента '
+                                           'его выдачи!')
+                    return HttpResponseRedirect('/push/{}'.format(check_sum))
+                else:
+                    check_sum.activation_status = True
+                    check_sum.end_date = timezone.now()
+                    check_sum.save()
+                    messages.info(request,
+                                  'Поздравляем! Вы успешно активировали ваш '
+                                  'секретный ключ.')
+                    return HttpResponseRedirect('/push/{}'.format(check_sum))
             else:
                 messages.info(request,
                               'Контрольные суммы не совпадают! Попробуйте ещё '
