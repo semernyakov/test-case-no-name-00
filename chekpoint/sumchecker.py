@@ -3,6 +3,7 @@ import hashlib
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+
 from .models import KeyCounter, KeyBox
 
 
@@ -41,9 +42,3 @@ def check_sum_controller(code):
                 return obj.check_sum
             except KeyBox.DoesNotExist:
                 raise Http404("Введённый код отсутствует, либо уже активирован")
-    
-                
-            
-
-
-

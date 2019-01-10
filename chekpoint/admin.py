@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from .models import KeyCounter, KeyBox
 
 
@@ -15,6 +16,6 @@ class AdminKeyBox(admin.ModelAdmin):
     show_full_result_count = True
     search_fields = ['key_code', 'id']
     readonly_fields = ['check_sum', 'key_amount']
-
+    
     def key_amount(self, obj):
         return obj.key_counter.keys_amount

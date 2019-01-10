@@ -1,6 +1,6 @@
 # TEST CASE / FOR PERX
 
-Проект разработан автором: Иван Семерняков <direct@beatum-group.ru>
+Разработал: Иван Семерняков <direct@beatum-group.ru>
 
 ## Архитектура
 
