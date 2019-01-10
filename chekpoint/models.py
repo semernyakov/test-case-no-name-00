@@ -60,3 +60,6 @@ class KeyBox(models.Model):
         from .sumchecker import check_sum_generator
         check_sum_generator(self)
         super(KeyBox, self).save(*args, **kwargs)
+
+    class Meta:
+        ordering = ['-pub_date']

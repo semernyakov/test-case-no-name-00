@@ -14,9 +14,24 @@
 <body>
   <div class="container" style="padding-top: 3em;">
 
+      {% if messages %}
+        {% for message in messages %}
+         <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %}" role="alert">
+            <strong>{{ message }}</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endfor %}
+      {% endif %}
+
       <div class="jumbotron" style="padding: 2em 2em;">
         <h1 class="display-3">ChekPoint Project</h1>
-        <p class="lead">Поздравляем, ваш секретный код успешно активирован!</p>
+      {% if not check_sum.activation_status %}
+        <p class="lead">Активация секретного ключ</p>
+      {% else %}
+        <p class="lead">Этот секртеный ключ уже активирован! Повторная активация, не возможна!</p>
+      {% endif %}
         <hr class="my-2">
         <p>
           Секретный код: <strong>{{ check_sum.key_code }} </strong><br>
@@ -24,17 +39,40 @@
           Дата активации: <strong>{{ check_sum.end_date }}</strong><br>
           Дата выдачи: <strong>{{ check_sum.pub_date }}</strong><br>
           Контрольная сумма: <strong>{{ check_sum.check_sum }}</strong><br>
-          Владелец: <strong>{{ check_sum.owner }}</strong>
+          <!--Владелец: <strong>{{ check_sum.owner }}</strong>-->
         </p>
-        <p class="lead">
-          <a class="btn btn-primary btn-lg" href="{% url 'home' %}" role="button">Вернуться на главную</a>
-        </p>
+        <div class="lead">
+          <div class="row">
+
+            <div class="col-md-2">
+              <a class="btn btn-primary btn-lg" href="{% url 'home' %}" role="button">На главную</a>
+            </div>
+            {% if not check_sum.activation_status %}
+              <div class="col-md-10">
+
+              <form class="form-inline row" method="post">
+                  {% csrf_token %}
+                  <div class="col-md-3">
+                  <button style="margin-left: -0.25em;" name="" id="" value="/" class="btn btn-success btn-lg" type="submit">Активировать код</button>
+                  </div>
+                <div class="form-group col-md-9">
+                    <input value="{{ check_sum.check_sum }}" maxlength="32" type="text" name="check_sum" id="id_check_sum" class="col-12 form-control form-control-lg" placeholder="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" required>
+
+                  </div>
+              </form>
+
+            </div>
+            {% endif %}
+          </div>
       </div>
+
+      </div>
+
   </div>
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 </body>
 </html>
 
 
-{#<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>#}
-{#<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>#}
-{#<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>#}

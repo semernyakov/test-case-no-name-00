@@ -9,10 +9,11 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         try:
-            counter = KeyCounter.objects.get(pk=1)
-        except KeyCounter.DoesNotExist:
             counter = KeyCounter(keys_amount=500)
             counter.save()
+        except CommandError as e:
+            print(e)
+            raise CommandError
 
-        self.stdout.write(self.style.SUCCESS('Alredy exists or Successfully '
-                                             'created: "%s"' % counter))
+        self.stdout.write(self.style.SUCCESS('Запись успешно создана, со '
+                                             'значением 500 едениц!'))

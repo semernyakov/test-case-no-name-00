@@ -31,32 +31,48 @@
       Общее кол-во не активированных ключей: {{ counter.keys_amount }}</p>
     <hr class="my-2">
     <p>Каждый код зашифрован по MD5 (англ. Message Digest 5) — 128-битный алгоритм хеширования, разработанн профессором Рональдом Л. Ривестом из Массачусетского технологического института (Massachusetts Institute of Technology, MIT) в 1991 году.</p>
-
     <div class="lead">
       <div class="row">
-
-        <div class="col-md-3">
-          <a class="btn btn-primary btn-lg" href="Jumbo action link" role="button">Генерировать код</a>
-        </div>
-
         <div class="col-md-9">
-
-
           <form class="form-inline" method="post">
             {% csrf_token %}
             <div class="form-group">
-              <button style="margin: 0 1em 0 -1.5em;" name="" id="" value="/" class="btn btn-success btn-lg" type="submit">Активировать код</button>
+              <button style="margin: 0 1em 0 0.5em;" name="" id="" value="/" class="btn btn-primary btn-lg" type="submit">Активировать секретный ключ</button>
               <input maxlength="4" type="text" name="code" id="" class="form-control form-control-lg col-2" placeholder="XXXX" aria-describedby="helpId" required>
               <small id="helpId" style="padding-left: 1em;" class="text-muted">Введите ваш 4-х значный код, с учётом регистра </small>
             </div>
           </form>
-
         </div>
-
       </div>
   </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+  <div class="row">
+    {% if items %}
+      <div class="col-md-12">
+        <h3>Список сгенерированных ключей</h3>
+        <hr>
+        <p>Общее кол-во не сгенерированных ключей: {{ counter.keys_amount }}</p>
+        <hr>
+      </div>
+      {% for item in items %}
+        <div class="col-md-4">
+        <p>
+          ключ: <strong>{{ item.key_code }} </strong><br>
+          статус: <strong>{{ item.activation_status|yesno:"активирован,не активирован" }}</strong><br>
+          выдан:  <strong>{{ item.issue_status|yesno:"выдан,не выдан" }}</strong><br>
+          создан: <strong>{{ item.pub_date }}</strong><br>
+        </p>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="col-md-12"><p>Создайте счётчик ключей командой <code>./manage.py setcounter</code> затем создайте 10 новых ключей командой <code>./manage.py createkeycode</code>.
+        Либо воспользуйтесь командой <code>./manage.py createsuperuser --username=admin --email=admin@admin.ru</code>, затем два раза введите пароль и воспользуйтесь панелью администратора.</p></div>
+    {% endif %}
+    <div class="col-md-12"><p class="text-center small">&copy; 2019, Иван Сергеевич Семерняков<br>
+      Mail to: <a href="mailto:beatuminflow@gmail.com" class="mail">beatuminflow@gmail.com</a>, Telegram: @semernyakov </p></div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 </body>

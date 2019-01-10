@@ -1,10 +1,11 @@
+from django.utils import timezone
 from django.http import Http404
 from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 
 from .models import KeyBox, KeyCounter
-from .form import ChekActivationForm
+from .form import ChekActivationForm, KeyCodeActivator
 from .sumchecker import check_sum_controller
 
 
@@ -16,7 +17,8 @@ def home(request):
             if code:
                 try:
                     hash_link = check_sum_controller(code)
-                    return HttpResponseRedirect('/push/{}'.format(hash_link))
+                    obj = KeyBox.objects.get(check_sum=hash_link)
+                    return HttpResponseRedirect('/push/{}'.format(obj.id))
                 except:
                     messages.info(request, 'Вы не правльно ввели секретный код, попробуйте ещё раз!')
                     return HttpResponseRedirect('/')
@@ -34,9 +36,38 @@ def home(request):
         'items': kb, 'counter': kc, 'form': form})
 
 
-def push_check_sum(request, check_sum):
+def push_check_sum(request, id):
+    
     try:
-        check_sum = KeyBox.objects.get(check_sum=check_sum)
+        check_sum = KeyBox.objects.get(id=id)
+    
     except KeyBox.DoesNotExist:
-        raise Http404("Link does not exist")
-    return render(request, 'chekpoint/done.html', {'check_sum': check_sum})
+        messages.info(request, 'Объект не найден! Ошибка 404')
+        return HttpResponseRedirect('/')
+    except Exception as e:
+        print(e)
+        messages.info(request, 'Объект не найден! Ошибка 404')
+        return HttpResponseRedirect('/')
+
+    if request.method == 'POST':
+        form = KeyCodeActivator(request.POST or None)
+        
+        if form.is_valid():
+            get_check_sum = form.cleaned_data['check_sum']
+            
+            if get_check_sum == check_sum.check_sum:
+                check_sum.activation_status = True
+                check_sum.issue_status = True
+                check_sum.end_date = timezone.now()
+                check_sum.save()
+                messages.info(request, 'Поздравляем! Вы успешно активировали ваш секретный ключ.')
+                return HttpResponseRedirect('/push/{}'.format(check_sum))
+            else:
+                messages.info(request, 'Контрольные суммы не совпадают! Попробуйте ещё раз.')
+                return HttpResponseRedirect('/push/{}'.format(check_sum))
+        else:
+            messages.info(request, 'Не верно введена контрольная сумма! Попробуйте ещё раз!')
+    else:
+        form = ChekActivationForm()
+    
+    return render(request, 'chekpoint/done.html', {'check_sum': check_sum, 'form':form})

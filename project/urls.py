@@ -19,6 +19,6 @@ from chekpoint import views
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('push/<str:check_sum>', views.push_check_sum, name='checked'),
+    path('push/<str:id>', views.push_check_sum, name='checked'),
     path('admin/', admin.site.urls),
 ]
