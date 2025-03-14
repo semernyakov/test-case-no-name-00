@@ -1,4 +1,4 @@
-# TEST CASE / FOR PERX
+# TEST CASE 00
 
 Разработал: Иван Семерняков <direct@beatum-group.ru>
 
